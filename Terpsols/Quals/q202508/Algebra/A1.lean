@@ -75,8 +75,10 @@ lemma tiptop (H : Subgroup G) : (H.subgroupOf ⊤).relIndex ⊤ = H.relIndex ⊤
 
 /- Lemma for proof of part (b) improved -/
 
-lemma tiptop-b  (H : Subgroup G) : (H.subgroupOf ⊤).relIndex ⊤ = H.relIndex ⊤ := by
-
+lemma tiptopb (H : Subgroup G) : (H.subgroupOf ⊤).relIndex ⊤ = H.relIndex ⊤ := by
+    calc (H.subgroupOf (⊤ : Subgroup G)).relIndex ⊤
+        _= (H.subgroupOf ⊤).index := relIndex_top_right (H.subgroupOf ⊤)
+        _=  H.relIndex ⊤ := rfl
 
 /- Proof of Part (b) of the Algebra Qual -/
 
