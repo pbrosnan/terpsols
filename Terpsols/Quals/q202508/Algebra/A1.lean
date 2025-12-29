@@ -63,19 +63,12 @@ theorem alg_p1_a [N.Normal] : (Cent N : Subgroup G).Normal := by
     rw[ce]
     infer_instance
 
-/- Lemma for proof of part (b) -/
+/- Lemma for proof of part (b) comparing the relative indexes of two tops.
+   One is the top subgroup of G (i.e., what humans would call G).
+   The other is the top subgroup of the top subgroup of G regarded as a group.
+   Purely a Lean Mathlib4 thing.  But we have to do it. -/
 
 lemma tiptop (H : Subgroup G) : (H.subgroupOf ⊤).relIndex ⊤ = H.relIndex ⊤ := by
-    -- have t1 : H.relIndex ⊤ = H.index := Subgroup.relIndex_top_right H
-    have t2 : (H.subgroupOf (⊤ : Subgroup G)).relIndex ⊤ =
-        (H.subgroupOf ⊤).index := relIndex_top_right (H.subgroupOf ⊤)
-    have t3 : (H.subgroupOf ⊤).index = H.relIndex ⊤ :=  rfl
-    rw [t2, t3]
-
-
-/- Lemma for proof of part (b) improved -/
-
-lemma tiptopb (H : Subgroup G) : (H.subgroupOf ⊤).relIndex ⊤ = H.relIndex ⊤ := by
     calc (H.subgroupOf (⊤ : Subgroup G)).relIndex ⊤
         _= (H.subgroupOf ⊤).index := relIndex_top_right (H.subgroupOf ⊤)
         _=  H.relIndex ⊤ := rfl
