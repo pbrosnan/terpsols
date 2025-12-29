@@ -37,5 +37,5 @@ example : (0 : ENNReal) < ⊤ := by norm_num
 example : ¬((⊤ : ENNReal) < ⊤) := by norm_num
 example (a : NNReal) : a < (⊤ : ENNReal) := ENNReal.coe_lt_top
 
-theorem exist_compact_meas_lt (lta : a < volume A) : ∃ K : Set ℝ,
+lemma exist_compact_meas_lt (lta : a < volume A) : ∃ K : Set ℝ,
   K ⊆ A ∧ IsCompact K ∧ (a < volume K) := by sorry
