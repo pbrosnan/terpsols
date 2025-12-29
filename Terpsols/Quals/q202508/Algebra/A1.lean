@@ -26,7 +26,7 @@ variable (N : Subgroup G)
 def Cent : Subgroup G where
     carrier := { g : G | ∀ n, n ∈ N → g * n * g⁻¹ = n }
     one_mem' := by simp
-    mul_mem' :=
+    mul_mem' := by
         intro a b ain bin n nin
         have mulout : a * b * n * (a * b)⁻¹ = a * (b * n * b⁻¹) * a⁻¹ := by group
         rw [mulout]
