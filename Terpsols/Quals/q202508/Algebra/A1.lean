@@ -26,7 +26,7 @@ variable (N : Subgroup G)
 def Cent : Subgroup G where
     carrier := { g : G | ∀ n, n ∈ N → g * n * g⁻¹ = n }
     one_mem' := by simp
-    mul_mem' := by
+    mul_mem' :=
         intro a b ain bin n nin
         have mulout : a * b * n * (a * b)⁻¹ = a * (b * n * b⁻¹) * a⁻¹ := by group
         rw [mulout]
@@ -66,11 +66,17 @@ theorem alg_p1_a [N.Normal] : (Cent N : Subgroup G).Normal := by
 /- Lemma for proof of part (b) -/
 
 lemma tiptop (H : Subgroup G) : (H.subgroupOf ⊤).relIndex ⊤ = H.relIndex ⊤ := by
-    have t1 : H.relIndex ⊤ = H.index := Subgroup.relIndex_top_right H
+    -- have t1 : H.relIndex ⊤ = H.index := Subgroup.relIndex_top_right H
     have t2 : (H.subgroupOf (⊤ : Subgroup G)).relIndex ⊤ =
         (H.subgroupOf ⊤).index := relIndex_top_right (H.subgroupOf ⊤)
     have t3 : (H.subgroupOf ⊤).index = H.relIndex ⊤ :=  rfl
     rw [t2, t3]
+
+
+/- Lemma for proof of part (b) improved -/
+
+lemma tiptop-b  (H : Subgroup G) : (H.subgroupOf ⊤).relIndex ⊤ = H.relIndex ⊤ := by
+
 
 /- Proof of Part (b) of the Algebra Qual -/
 
