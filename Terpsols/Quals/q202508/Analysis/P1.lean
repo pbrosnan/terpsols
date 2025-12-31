@@ -1,7 +1,7 @@
 import Mathlib.MeasureTheory.MeasurableSpace.Defs
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+import Mathlib.MeasureTheory.Measure.Regular
 import Mathlib.Data.ENNReal.Basic
-
 
 noncomputable section Analysis_Problem_1
 
@@ -12,30 +12,38 @@ Prove that for any positive real number a < m(A), there exists a compact set K �
 such that m(K) = a.
 -/
 
-open Set MeasureTheory
+noncomputable section
+
+open Set Filter MeasureTheory ENNReal TopologicalSpace
+open scoped symmDiff Topology
+open MeasureTheory.Measure TopologicalSpace
+
 
 --- variable {α : Type*} [MeasurableSpace α]
 
-variable {A : Set ℝ} {hA : MeasurableSet A}
-variable (gt : 0 < volume A)
-variable (lt : volume A < ⊤)
+variable {A : Set ℝ}
 variable (a : NNReal)
 
-noncomputable section
-
-open Set Filter MeasureTheory MeasureTheory.Measure TopologicalSpace
 
 #check (volume : Measure ℝ)
 
-#check (Ico a b)
-#check volume (Ico a b)
 #check volume A
+#check (volume : Measure ℝ) A
 #check NNReal
 #check ENNReal
+#check volume.InnerRegular
 
+
+example : volume A = (volume : Measure ℝ) A := rfl
 example : (0 : ENNReal) < ⊤ := by norm_num
 example : ¬((⊤ : ENNReal) < ⊤) := by norm_num
 example (a : NNReal) : a < (⊤ : ENNReal) := ENNReal.coe_lt_top
 
-lemma exist_compact_meas_lt (lta : a < volume A) : ∃ K : Set ℝ,
-  K ⊆ A ∧ IsCompact K ∧ (a < volume K) := by sorry
+
+lemma exist_compact_meas_lt (lta : a < volume A) (hyp : MeasurableSet A) : ∃ K : Set ℝ,
+  K ⊆ A ∧ IsCompact K ∧ (a < volume K) := by
+  have : (volume : Measure ℝ).InnerRegular := by
+     exact InnerRegularCompactLTTop.instInnerRegularOfSigmaFinite
+  apply MeasurableSet.exists_lt_isCompact
+  ·  exact hyp
+  ·  exact lta
