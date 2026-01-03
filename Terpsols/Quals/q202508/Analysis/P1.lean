@@ -1,10 +1,12 @@
 import Mathlib.MeasureTheory.MeasurableSpace.Defs
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Measure.Regular
+import Mathlib.MeasureTheory.Constructions.UnitInterval
 import Mathlib.Data.ENNReal.Basic
 import Mathlib.Topology.Compactness.Compact
 import Mathlib.Topology.MetricSpace.Bounded
 import Mathlib.Topology.MetricSpace.Pseudo.Defs
+
 
 noncomputable section Analysis_Problem
 
@@ -19,8 +21,11 @@ noncomputable section
 
 open Set Filter MeasureTheory ENNReal TopologicalSpace MetricSpace
 open scoped symmDiff Topology
+open MeasureTheory
 open MeasureTheory.Measure TopologicalSpace
 open Metric
+open ENNReal (ofReal)
+open Real
 
 --- variable {α : Type*} [MeasurableSpace α]
 
@@ -35,6 +40,8 @@ variable (a : NNReal)
 #check volume.InnerRegular
 #check Icc
 #check closedBall
+#check volume_Icc
+#check ofReal
 
 example : volume A = (volume : Measure ℝ) A := rfl
 example : (0 : ENNReal) < ⊤ := by norm_num
@@ -78,9 +85,16 @@ IsCompact (J ∩ K) := by
 lemma compactmeas (K : Set ℝ) (cK : IsCompact K) : MeasurableSet K := by
   exact IsCompact.measurableSet cK
 
-def measfun (K : Set ℝ) (r : NNReal) : ENNReal := volume (K ∩ (Icc (-r) r))
+def v (r : NNReal) : ENNReal := volume (closedBall (0 : ℝ) r)
 
-lemma meascont (K : Set ℝ) :
+lemma volint (r s : ℝ) : volume (Icc r s)  = ofReal (s - r) :=
+  volume_Icc
+
+-- def measfun (K : Set ℝ) (r : NNReal) : ENNReal := volume (K ∩ (Icc (-r) r))
+
+lemma meascont (K : Set ℝ) : Continuous (fun r ↦
+(volume (K ∩ closedBall (0 : ℝ) r))) := by
+  apply?
 
 theorem exists_compact_eq (lta : a < volume A) (hyp : MeasurableSet A) :
 ∃ K : Set ℝ, K ⊆ A ∧ IsCompact K ∧ (a = volume K) := by
