@@ -2,11 +2,11 @@ import Mathlib.MeasureTheory.MeasurableSpace.Defs
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 import Mathlib.MeasureTheory.Measure.Regular
 import Mathlib.MeasureTheory.Constructions.UnitInterval
+import Mathlib.MeasureTheory.OuterMeasure.Basic
 import Mathlib.Data.ENNReal.Basic
 import Mathlib.Topology.Compactness.Compact
 import Mathlib.Topology.MetricSpace.Bounded
 import Mathlib.Topology.MetricSpace.Pseudo.Defs
-
 
 noncomputable section Analysis_Problem
 
@@ -85,16 +85,56 @@ IsCompact (J ∩ K) := by
 lemma compactmeas (K : Set ℝ) (cK : IsCompact K) : MeasurableSet K := by
   exact IsCompact.measurableSet cK
 
-def v (r : NNReal) : ENNReal := volume (closedBall (0 : ℝ) r)
-
 lemma volint (r s : ℝ) : volume (Icc r s)  = ofReal (s - r) :=
   volume_Icc
 
--- def measfun (K : Set ℝ) (r : NNReal) : ENNReal := volume (K ∩ (Icc (-r) r))
+#check measure_mono
+
+lemma vintK (r s : ℝ) (K : Set ℝ) : volume (K ∩ (Icc r s))
+≤ ofReal (s - r ) := by
+  calc volume (K ∩ (Icc r s))
+    _≤ volume (Icc r s) := by
+      refine measure_mono ?_
+      exact inter_subset_right
+    _= ofReal (s -  r) := by exact volint r s
+
+lemma cbints {x y : ℝ} : closedBall 0 y ⊆
+  (closedBall 0 x) ∪ (Ioc x y) ∪ (Ico (-y) (-x)) := by
+  intro v vin
+  simp_all only [mem_closedBall, dist_zero_right, norm_eq_abs, mem_union, mem_Ioc, mem_Ico]
+  by_cases h : |v| ≤ x
+  · left
+    · left
+      exact h
+  by_cases k : 0 ≤ v
+  · left
+    right
+    have : |v| = v := by exact abs_of_nonneg k
+    rw [this] at vin
+    simp only [not_le] at h
+    rw [this] at h
+    tauto
+  · right
+    simp only [not_le] at k
+    have : |v| = -v := by exact abs_of_neg k
+    rw [this] at vin
+    rw [this] at h
+    simp only [not_le] at h
+    constructor
+    · exact neg_le.mp vin
+    · exact lt_neg_of_lt_neg h
+
+
 
 lemma meascont (K : Set ℝ) : Continuous (fun r ↦
 (volume (K ∩ closedBall (0 : ℝ) r))) := by
-  apply?
+  refine continuous_of_le_add_edist 2 (fun a ↦ ?_) ?_
+  · contrapose! a
+    exact Ne.symm top_ne_ofNat
+  · intro x y
+    by_cases h : x < y
+    · sorry
+
 
 theorem exists_compact_eq (lta : a < volume A) (hyp : MeasurableSet A) :
 ∃ K : Set ℝ, K ⊆ A ∧ IsCompact K ∧ (a = volume K) := by
