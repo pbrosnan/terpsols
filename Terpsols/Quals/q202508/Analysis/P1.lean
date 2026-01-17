@@ -42,11 +42,37 @@ variable (a : NNReal)
 #check closedBall
 #check volume_Icc
 #check ofReal
+#check edist_le_ofReal
+#check edist_eq_enorm_sub
 
 example : volume A = (volume : Measure ℝ) A := rfl
 example : (0 : ENNReal) < ⊤ := by norm_num
 example : ¬((⊤ : ENNReal) < ⊤) := by norm_num
 example (a : NNReal) : a < (⊤ : ENNReal) := ENNReal.coe_lt_top
+example : (edist (0 : ℝ) 1).toReal = 1 := by
+  simp only [edist_zero_left, nnnorm_one, coe_one, toReal_one]
+example {r s : ℝ} (h : r < s) : (edist r s).toReal = s - r := by
+  rw [edist_eq_enorm_sub]
+  norm_num
+  simp [abs]
+  linarith
+example {r s : ℝ} : (edist r s) = (edist s r) := by
+  exact edist_comm r s
+
+lemma distabs (r s : ℝ) : (edist r s).toReal = |r - s| := by
+ rw [edist_eq_enorm_sub]
+ norm_num
+
+lemma volle (r s : ℝ) : volume (Icc r s) ≤ edist s r := by
+  simp_all only [volume_Icc]
+  rw [edist_eq_enorm_sub]
+  exact ofReal_le_enorm (s - r)
+
+lemma volKle (r s : ℝ) (K : Set ℝ) : volume (K ∩ Icc r s) ≤ edist s r := by
+  have : K ∩ Icc r s ⊆ Icc r s := inter_subset_right
+  calc volume (K ∩ Icc r s)
+   _≤ volume (Icc r s) := OuterMeasureClass.measure_mono volume this
+   _≤ edist s r := volle r s
 
 lemma exist_compact_meas_lt (lta : a < volume A) (hyp : MeasurableSet A) : ∃ K : Set ℝ,
   K ⊆ A ∧ IsCompact K ∧ (a < volume K) := by
@@ -85,8 +111,10 @@ IsCompact (J ∩ K) := by
 lemma compactmeas (K : Set ℝ) (cK : IsCompact K) : MeasurableSet K := by
   exact IsCompact.measurableSet cK
 
-lemma volint (r s : ℝ) : volume (Icc r s)  = ofReal (s - r) :=
+lemma volint (r s : ℝ) : volume (Icc r s) = ofReal (s - r) :=
   volume_Icc
+
+
 
 #check measure_mono
 
@@ -125,6 +153,32 @@ lemma cbints {x y : ℝ} : closedBall 0 y ⊆
     · exact lt_neg_of_lt_neg h
 
 
+lemma ccbints {x y : ℝ} : closedBall 0 y ⊆
+  (closedBall 0 x) ∪ (Icc x y) ∪ (Icc (-y) (-x)) := by
+  intro v vin
+  -- simp_all only [mem_closedBall, dist_zero_right, norm_eq_abs, mem_union, mem_Ioc, mem_Ico]
+  simp
+  by_cases h : |v| ≤ x
+  · left
+    · left
+      exact h
+  by_cases k : 0 ≤ v
+  · left
+    right
+    have : |v| = v := by exact abs_of_nonneg k
+    -- rw [this] at vin
+    simp only [not_le] at h
+    rw [this] at h
+    norm_num
+  · right
+    simp only [not_le] at k
+    have : |v| = -v := by exact abs_of_neg k
+    -- rw [this] at vin
+    rw [this] at h
+    simp only [not_le] at h
+    constructor
+    · exact neg_le.mp vin
+    · exact lt_neg_of_lt_neg h
 
 lemma meascont (K : Set ℝ) : Continuous (fun r ↦
 (volume (K ∩ closedBall (0 : ℝ) r))) := by
@@ -132,11 +186,29 @@ lemma meascont (K : Set ℝ) : Continuous (fun r ↦
   · contrapose! a
     exact Ne.symm top_ne_ofNat
   · intro x y
-    by_cases h : x < y
-    · sorry
+    have cbcont : closedBall 0 x ⊆ closedBall 0 y ∪ Ioc y x ∪ Ico (-x) (-y) := cbints
+    have Kcont : K ∩ closedBall 0 x ⊆ (K ∩ closedBall 0 y) ∪ (K ∩ Ioc y x)
+      ∪ (K ∩ Ico (-x) (-y)) := by grind
+    have Kcontb : K ∩ closedBall 0 x ⊆ (K ∩ closedBall 0 y) ∪ (K ∩ Icc y x)
+      ∪ (K ∩ Icc (-x) (-y)) := by grind
+    have : volume (K ∩ closedBall 0 y ∪ K ∩ Icc y x) ≤ volume (K ∩ closedBall 0 y) + edist x y := by
+      calc
+    calc volume (K ∩ closedBall 0 x)
+      _≤ volume ((K ∩ closedBall 0 y) ∪ (K ∩ Icc y x)
+      ∪ (K ∩ Icc (-x) (-y))) := OuterMeasureClass.measure_mono volume Kcontb
+      _≤ volume ((K ∩ closedBall 0 y) ∪ (K ∩ Icc y x))
+        + volume (K ∩ Icc (-x) (-y)) := measure_union_le (K ∩ closedBall 0 y ∪ K ∩ Icc y x) (K ∩ Icc (-x) (-y))
+      _≤  volume ((K ∩ closedBall 0 y) ∪ (K ∩ Icc y x)) + edist (-y) (-x) := by
+        refine (ENNReal.add_le_add_iff_left ?_).mpr ?_
+        ·
 
+
+lemma meascontb (K : Set ℝ) : Continuous (fun r ↦
+(volume (K ∩ closedBall (0 : ℝ) r))) := by
+  exact meascont K
+
+#check le_of_add_le_add_right
 
 theorem exists_compact_eq (lta : a < volume A) (hyp : MeasurableSet A) :
 ∃ K : Set ℝ, K ⊆ A ∧ IsCompact K ∧ (a = volume K) := by
   obtain ⟨K, Ksub, Kcom, alt⟩ := exist_compact_meas_lt a lta hyp
-  sorry
