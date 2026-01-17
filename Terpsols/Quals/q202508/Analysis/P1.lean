@@ -114,8 +114,6 @@ lemma compactmeas (K : Set ℝ) (cK : IsCompact K) : MeasurableSet K := by
 lemma volint (r s : ℝ) : volume (Icc r s) = ofReal (s - r) :=
   volume_Icc
 
-
-
 #check measure_mono
 
 lemma vintK (r s : ℝ) (K : Set ℝ) : volume (K ∩ (Icc r s))
@@ -202,13 +200,37 @@ lemma meascont (K : Set ℝ) : Continuous (fun r ↦
         refine (ENNReal.add_le_add_iff_left ?_).mpr ?_
         ·
 
-
-lemma meascontb (K : Set ℝ) : Continuous (fun r ↦
-(volume (K ∩ closedBall (0 : ℝ) r))) := by
-  exact meascont K
-
 #check le_of_add_le_add_right
+
+lemma volpt :  volume (closedBall (0 : ℝ) 0) = 0 := by
+  have : closedBall (0 : ℝ) 0 = Icc 0 0 := by
+    ext x
+    norm_num
+  rw [this]
+  simp only [Icc_self, measure_singleton]
 
 theorem exists_compact_eq (lta : a < volume A) (hyp : MeasurableSet A) :
 ∃ K : Set ℝ, K ⊆ A ∧ IsCompact K ∧ (a = volume K) := by
   obtain ⟨K, Ksub, Kcom, alt⟩ := exist_compact_meas_lt a lta hyp
+  let f := (fun r ↦ (volume (K ∩ closedBall (0 : ℝ) r)))
+  have cont : Continuous f := meascont K
+  have : ∃ s : ℝ,  K ⊆ closedBall (0 : ℝ) s := by
+    refine (isBounded_iff_subset_closedBall 0).mp ?_
+    exact IsCompact.isBounded Kcom
+  obtain ⟨s, Kin⟩ := this
+  have Kinab : K ⊆ closedBall 0 |s| :=
+    calc K
+      _⊆ closedBall 0 s := Kin
+      _⊆ closedBall 0 |s| := by
+        refine closedBall_subset_closedBall ?_
+        exact le_abs_self s
+  have Kempt : K \ closedBall 0 |s| = ∅ := diff_eq_empty.mpr Kinab
+  have fas : f |s| = volume K := by
+    refine measure_inter_conull' ?_
+    rw [Kempt]
+    exact OuterMeasureClass.measure_empty volume
+  have fzero : f 0 = 0 := by
+    refine measure_inter_null_of_null_right K ?_
+    exact
+  have ivt : ∃ t : ℝ, t ∈ Ioo 0 |s| ∧ f t = a := by
+    apply?
