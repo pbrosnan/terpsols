@@ -150,33 +150,13 @@ lemma cbints {x y : ℝ} : closedBall 0 y ⊆
     · exact neg_le.mp vin
     · exact lt_neg_of_lt_neg h
 
+#check add_le_add_right
 
-lemma ccbints {x y : ℝ} : closedBall 0 y ⊆
-  (closedBall 0 x) ∪ (Icc x y) ∪ (Icc (-y) (-x)) := by
-  intro v vin
-  -- simp_all only [mem_closedBall, dist_zero_right, norm_eq_abs, mem_union, mem_Ioc, mem_Ico]
-  simp
-  by_cases h : |v| ≤ x
-  · left
-    · left
-      exact h
-  by_cases k : 0 ≤ v
-  · left
-    right
-    have : |v| = v := by exact abs_of_nonneg k
-    -- rw [this] at vin
-    simp only [not_le] at h
-    rw [this] at h
-    norm_num
-  · right
-    simp only [not_le] at k
-    have : |v| = -v := by exact abs_of_neg k
-    -- rw [this] at vin
-    rw [this] at h
-    simp only [not_le] at h
-    constructor
-    · exact neg_le.mp vin
-    · exact lt_neg_of_lt_neg h
+example {a b : ℝ} {h : a = b} : a ≤ b := by exact ge_of_eq (id (Eq.symm h))
+
+lemma edisteq (x y : ℝ) : edist x y = edist (-y) (-x) := by
+  rw[edist_comm]
+  exact Eq.symm (edist_neg_neg y x)
 
 lemma meascont (K : Set ℝ) : Continuous (fun r ↦
 (volume (K ∩ closedBall (0 : ℝ) r))) := by
@@ -189,16 +169,38 @@ lemma meascont (K : Set ℝ) : Continuous (fun r ↦
       ∪ (K ∩ Ico (-x) (-y)) := by grind
     have Kcontb : K ∩ closedBall 0 x ⊆ (K ∩ closedBall 0 y) ∪ (K ∩ Icc y x)
       ∪ (K ∩ Icc (-x) (-y)) := by grind
-    have : volume (K ∩ closedBall 0 y ∪ K ∩ Icc y x) ≤ volume (K ∩ closedBall 0 y) + edist x y := by
-      calc
+    have : volume (K ∩ closedBall 0 y ∪ K ∩ Icc y x) ≤ volume (K ∩ closedBall 0 y) + edist x y :=
+      calc volume (K ∩ closedBall 0 y ∪ K ∩ Icc y x)
+        _≤ volume (K ∩ closedBall 0 y) + volume (K ∩ Icc y x) :=
+          measure_union_le (K ∩ closedBall 0 y) (K ∩ Icc y x)
+        _≤ volume (K ∩ closedBall 0 y) + edist x y := by
+          apply add_le_add_right
+          exact volKle y x K
     calc volume (K ∩ closedBall 0 x)
       _≤ volume ((K ∩ closedBall 0 y) ∪ (K ∩ Icc y x)
       ∪ (K ∩ Icc (-x) (-y))) := OuterMeasureClass.measure_mono volume Kcontb
       _≤ volume ((K ∩ closedBall 0 y) ∪ (K ∩ Icc y x))
-        + volume (K ∩ Icc (-x) (-y)) := measure_union_le (K ∩ closedBall 0 y ∪ K ∩ Icc y x) (K ∩ Icc (-x) (-y))
+        + volume (K ∩ Icc (-x) (-y)) :=
+          measure_union_le (K ∩ closedBall 0 y ∪ K ∩ Icc y x) (K ∩ Icc (-x) (-y))
       _≤  volume ((K ∩ closedBall 0 y) ∪ (K ∩ Icc y x)) + edist (-y) (-x) := by
-        refine (ENNReal.add_le_add_iff_left ?_).mpr ?_
-        ·
+        apply add_le_add_right
+        exact volKle (-x) (-y) K
+      _≤ volume ((K ∩ closedBall 0 y))  + volume (K ∩ Icc y x) + edist (-y) (-x) := by
+        apply add_le_add_left
+        exact measure_union_le (K ∩ closedBall 0 y) (K ∩ Icc y x)
+      _≤ volume ((K ∩ closedBall 0 y))  + edist x y + edist (-y) (-x) := by
+          apply add_le_add_left
+          apply add_le_add_right
+          exact volKle y x K
+      _≤ volume ((K ∩ closedBall 0 y))  + 2 * edist x y := by
+        rw [add_assoc]
+        apply add_le_add_right
+        rw [← edisteq]
+        apply ge_of_eq
+        ring
+
+
+
 
 #check le_of_add_le_add_right
 
