@@ -229,8 +229,30 @@ theorem exists_compact_eq (lta : a < volume A) (hyp : MeasurableSet A) :
     refine measure_inter_conull' ?_
     rw [Kempt]
     exact OuterMeasureClass.measure_empty volume
-  have fzero : f 0 = 0 := by
+  have zls : 0 ≤ |s| := abs_nonneg s
+  have ivtml : Icc (f 0) (f |s|) ⊆ f '' Icc 0 |s| := by
+    refine intermediate_value_Icc zls ?_
+    exact Continuous.continuousOn cont
+  have : f 0 = 0 := by
     refine measure_inter_null_of_null_right K ?_
-    exact
-  have ivt : ∃ t : ℝ, t ∈ Ioo 0 |s| ∧ f t = a := by
-    apply?
+    exact volpt
+  have ain : ↑a ∈ Icc (f 0) (f |s|) := by
+    refine mem_Icc.mpr ?_
+    constructor
+    · rw[this]
+      simp
+    · rw[fas]
+      exact Std.le_of_lt alt
+  have  : ∃ t : ℝ, t ∈ Icc 0 |s| ∧ f t = a := by
+    refine (mem_image f (Icc 0 |s|) ↑a).mp ?_
+    exact (mem_image f (Icc 0 |s|) ↑a).mpr (ivtml ain)
+  obtain ⟨t, tin, foft⟩ := this
+  use K ∩ closedBall 0 t
+  constructor
+  · calc K ∩ closedBall 0 t
+      _⊆ K := inter_subset_left
+      _⊆ A := Ksub
+  · constructor
+    · refine IsCompact.inter_right Kcom ?_
+      exact isClosed_closedBall
+    · rw[← foft]
