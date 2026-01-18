@@ -32,19 +32,6 @@ open Real
 variable {A : Set ℝ}
 variable (a : NNReal)
 
-#check (volume : Measure ℝ)
-#check volume A
-#check (volume : Measure ℝ) A
-#check NNReal
-#check ENNReal
-#check volume.InnerRegular
-#check Icc
-#check closedBall
-#check volume_Icc
-#check ofReal
-#check edist_le_ofReal
-#check edist_eq_enorm_sub
-
 example : volume A = (volume : Measure ℝ) A := rfl
 example : (0 : ENNReal) < ⊤ := by norm_num
 example : ¬((⊤ : ENNReal) < ⊤) := by norm_num
@@ -114,8 +101,6 @@ lemma compactmeas (K : Set ℝ) (cK : IsCompact K) : MeasurableSet K := by
 lemma volint (r s : ℝ) : volume (Icc r s) = ofReal (s - r) :=
   volume_Icc
 
-#check measure_mono
-
 lemma vintK (r s : ℝ) (K : Set ℝ) : volume (K ∩ (Icc r s))
 ≤ ofReal (s - r ) := by
   calc volume (K ∩ (Icc r s))
@@ -150,7 +135,6 @@ lemma cbints {x y : ℝ} : closedBall 0 y ⊆
     · exact neg_le.mp vin
     · exact lt_neg_of_lt_neg h
 
-#check add_le_add_right
 
 example {a b : ℝ} {h : a = b} : a ≤ b := by exact ge_of_eq (id (Eq.symm h))
 
@@ -198,11 +182,6 @@ lemma meascont (K : Set ℝ) : Continuous (fun r ↦
         rw [← edisteq]
         apply ge_of_eq
         ring
-
-
-
-
-#check le_of_add_le_add_right
 
 lemma volpt :  volume (closedBall (0 : ℝ) 0) = 0 := by
   have : closedBall (0 : ℝ) 0 = Icc 0 0 := by
