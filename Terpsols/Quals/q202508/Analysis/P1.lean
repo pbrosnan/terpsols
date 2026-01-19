@@ -17,6 +17,11 @@ Prove that for any positive real number a < m(A), there exists a compact set K â
 such that m(K) = a.
 -/
 
+/- Solution in 
+      theorem exists_compact_eq 
+  at the end of the file.
+-/
+
 noncomputable section
 
 open Set Filter MeasureTheory ENNReal TopologicalSpace MetricSpace
