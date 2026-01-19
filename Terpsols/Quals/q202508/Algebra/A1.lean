@@ -15,12 +15,19 @@ open MonoidHom
    (b) Show that if N is finite then C has finite index in G. (Hint: Aut(N) is finite.)
 -/
 
+/-
+  Solution is in theorem alg_p1_b at the end of the file. 
+-/
+
 variable {G : Type*} [Group G]
 variable (N : Subgroup G)
 
 /- Defining Centralizer by hand because it is defined in the problem statement
-   The issue here is that the problem statement asks us to prove that the centralizer is a
-   subgroup, while, for lean, the centralizer is already defined as a subgroup in the library.
+   One issue here is that the problem statement asks us to prove that the centralizer is a
+   subgroup, while, for lean, the centralizer is already defined as a subgroup in the library, mathlib4.
+   Another issue is that, in the problem statement, the centralizer is defined in terms of  
+   conjugation, while, in mathlib4, centralizers are defined for arbitrary magmas (without 
+   using conjugation).
 -/
 
 def Cent : Subgroup G where
@@ -40,7 +47,7 @@ def Cent : Subgroup G where
         group
 
 /-
-   Proof the Cent as defined in the problem agrees with centralizer as defined in
+   Proof that Cent as defined in the problem agrees with centralizer as defined in
    Mathlib4, which is in terms of the centralizer of a subset of a magma.
 -/
 
