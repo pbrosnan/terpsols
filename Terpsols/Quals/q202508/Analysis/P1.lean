@@ -12,6 +12,41 @@ such that m(K) = a.
 /- Solution in
       theorem exists_compact_eq
   at the end of the file.
+
+  Note that the statement above, which is the same as the statement
+  on the Qualifying Exam makes
+  the unecessary assumption that m(A) < ∞.
+  theorem exists_compact_eq below proves
+  without the unecessary assumption.
+  In other words, theorem exists_compact_eq proves the following:
+
+  Let A be a Lebesgue measurable subset of R with 0 < m(A),
+  where m denotes the Lebesgue measure on R.
+  For any positive real number a < m(A), there exists a compact set K ⊂ A
+  such that m(K) = a.
+-/
+
+/-
+  The mathematical idea behind the solution is that Lebesque
+  measure is inner regular.  So, if a < m(A), there always
+  exists a compact subset K₁ of A with a < m(K).
+  Then the function f(r) = m(K₁ ∩ [-r, r]) is continuous
+  with f(0) = 0 and f(r) = m(K₁) for r >> 0.
+  So, by the Intermediate Value Theorem, we can find an r
+  such that f(r) = a.
+  Then K := K₁ ∩ [-r, r] is a compact subset of A
+  satisfying m(K) = a.
+
+  The main technical challenge in implementing this solution
+  is dealing with the volumes of intervals in lean and continuity.
+  In particular, for the continuity, mathlib4 seems to want
+  to think in terms of edist(r,s), the generalized distance
+  between points r and s viewed as points in a metric space.
+  On the other hand, volumes are reported as elements of ENNReal,
+  the extended nonnegative real numbers: [0, ∞]
+  Going back an forth between various notions of distance
+  for these various is the reason for most of the lemmas in
+  the file.
 -/
 
 noncomputable section
