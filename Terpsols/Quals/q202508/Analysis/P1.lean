@@ -1,12 +1,4 @@
-import Mathlib.MeasureTheory.MeasurableSpace.Defs
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.MeasureTheory.Measure.Regular
-import Mathlib.MeasureTheory.Constructions.UnitInterval
-import Mathlib.MeasureTheory.OuterMeasure.Basic
-import Mathlib.Data.ENNReal.Basic
-import Mathlib.Topology.Compactness.Compact
-import Mathlib.Topology.MetricSpace.Bounded
-import Mathlib.Topology.MetricSpace.Pseudo.Defs
 
 noncomputable section Analysis_Problem
 
@@ -17,8 +9,8 @@ Prove that for any positive real number a < m(A), there exists a compact set K â
 such that m(K) = a.
 -/
 
-/- Solution in 
-      theorem exists_compact_eq 
+/- Solution in
+      theorem exists_compact_eq
   at the end of the file.
 -/
 
