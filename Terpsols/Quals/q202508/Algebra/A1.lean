@@ -16,18 +16,20 @@ open MonoidHom
 -/
 
 /-
-  Solution is in theorem alg_p1_b at the end of the file. 
+  Solution is in theorem alg_p1_b at the end of the file.
 -/
 
 variable {G : Type*} [Group G]
 variable (N : Subgroup G)
 
-/- Defining Centralizer by hand because it is defined in the problem statement
-   One issue here is that the problem statement asks us to prove that the centralizer is a
-   subgroup, while, for lean, the centralizer is already defined as a subgroup in the library, mathlib4.
-   Another issue is that, in the problem statement, the centralizer is defined in terms of  
-   conjugation, while, in mathlib4, centralizers are defined for arbitrary magmas (without 
-   using conjugation).
+/-
+Defining Centralizer by hand because it is defined in the problem statement
+One issue here is that the problem statement asks us to prove that the
+centralizer is a subgroup, while, for lean, the centralizer is already defined
+as a subgroup in the library, mathlib4.
+Another issue is that, in the problem statement, the centralizer is defined in terms of
+conjugation, while, in mathlib4, centralizers are defined for arbitrary magmas (without
+using conjugation).
 -/
 
 def Cent : Subgroup G where
