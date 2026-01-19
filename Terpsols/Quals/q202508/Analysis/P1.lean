@@ -43,10 +43,6 @@ example {r s : ℝ} (h : r < s) : (edist r s).toReal = s - r := by
 example {r s : ℝ} : (edist r s) = (edist s r) := by
   exact edist_comm r s
 
-lemma distabs (r s : ℝ) : (edist r s).toReal = |r - s| := by
- rw [edist_eq_enorm_sub]
- norm_num
-
 lemma volle (r s : ℝ) : volume (Icc r s) ≤ edist s r := by
   simp_all only [volume_Icc]
   rw [edist_eq_enorm_sub]
@@ -77,34 +73,8 @@ lemma ball_int (r : ℝ) : closedBall (0 : ℝ) r = Icc (-r) r := by
     simp_all only [mem_Icc, mem_closedBall, dist_zero_right, Real.norm_eq_abs]
     exact abs_le.mpr xin
 
-lemma compact_in_ball (K : Set ℝ) (com : IsCompact K) : ∃ r : ℝ,
-K ⊆ Icc (-r) r := by
-  have : ∃ r,  K ⊆ closedBall (0 : ℝ) r := by
-    apply (isBounded_iff_subset_closedBall (0 : ℝ)).mp
-    exact IsCompact.isBounded com
-  obtain ⟨r, Kcont⟩ := this
-  use r
-  rw [← ball_int]
-  exact Kcont
-
-lemma intcompact (J K : Set ℝ) (cJ : IsCompact J) (cK : IsCompact K) :
-IsCompact (J ∩ K) := by
-  have : IsClosed K := IsCompact.isClosed cK
-  exact IsCompact.inter_right cJ this
-
-lemma compactmeas (K : Set ℝ) (cK : IsCompact K) : MeasurableSet K := by
-  exact IsCompact.measurableSet cK
-
 lemma volint (r s : ℝ) : volume (Icc r s) = ofReal (s - r) :=
   volume_Icc
-
-lemma vintK (r s : ℝ) (K : Set ℝ) : volume (K ∩ (Icc r s))
-≤ ofReal (s - r ) := by
-  calc volume (K ∩ (Icc r s))
-    _≤ volume (Icc r s) := by
-      refine measure_mono ?_
-      exact inter_subset_right
-    _= ofReal (s -  r) := by exact volint r s
 
 lemma cbints {x y : ℝ} : closedBall 0 y ⊆
   (closedBall 0 x) ∪ (Ioc x y) ∪ (Ico (-y) (-x)) := by
@@ -131,7 +101,6 @@ lemma cbints {x y : ℝ} : closedBall 0 y ⊆
     constructor
     · exact neg_le.mp vin
     · exact lt_neg_of_lt_neg h
-
 
 example {a b : ℝ} {h : a = b} : a ≤ b := by exact ge_of_eq (id (Eq.symm h))
 
