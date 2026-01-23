@@ -1,6 +1,5 @@
-import Mathlib.Data.Nat.Prime.Basic
-import MIL.Common
-import Init.Data.Int.Basic
+import Mathlib.Algebra.Ring.Regular
+import Mathlib.Analysis.Normed.Ring.Lemmas
 
 open BigOperators
 
@@ -46,22 +45,4 @@ theorem h3_1 (a b : ℤ) (dab : a ∣ b) (dba : b ∣ a) : a = b ∨ a = -b := b
       rw [this]
       ring
 
-#check lcm 3 4 
-#eval lcm 3 4 
-#eval lcm 3 (lcm 4 5)
-#eval gcd 3 4 
-
-#eval 3 / 2
-#eval 3 % 2
-#eval 5 % 3
-
-def div (n k : Nat) (ok : k ≠ 0): Nat := 
-  if h : n < k then 
-    0
-  else 
-    1 + div (n-k) k ok
-
-#eval div 7 3 (by norm_num)
-
-#eval gcd 7 3
-#eval Nat.gcd 7 3
+#min_imports
