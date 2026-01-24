@@ -13,15 +13,19 @@ open Subgroup
 open Function
 open MonoidHom
 
-/-
-   Problem 1: Let G be a group and let N be a normal subgroup.  Let
-   C = { g ∈ G | gng⁻¹ = n for all n ∈ N}.
-   (a) Show that C is a normal subgroup of G.
-   (b) Show that if N is finite then C has finite index in G. (Hint: Aut(N) is finite.)
--/
+/-!
+   # UMD Math Fall 2025 Algebra Qualifying Exam Problem 1
 
-/-
-  Solution is in theorem alg_p1_b at the end of the file.
+   ## Problem Statement 
+   
+   Let G be a group and let N be a normal subgroup.  Let
+   C = { g ∈ G | gng⁻¹ = n for all n ∈ N}.
+   1. Show that C is a normal subgroup of G.
+   2. Show that if N is finite then C has finite index in G. (Hint: Aut(N) is finite.)
+
+   ## Solution 
+   - Part 1 is solved in `alg_p1_a`	
+   - Part 2 is solved in `alg_p1_b`
 -/
 
 variable {G : Type*} [Group G]
