@@ -3,6 +3,10 @@ import Mathlib.Analysis.Normed.Ring.Lemmas
 
 open BigOperators
 
+/- Herstein Topics in Algebra.  Problem 1.3.1:
+    If a ∣ b and b ∣ a, show that a = ± b.
+-/
+
 lemma l3_1a (a b : ℤ) (h : a ^ 2 = b ^ 2) : a = b ∨ a = -b := sq_eq_sq_iff_eq_or_eq_neg.mp h
 
 lemma l3_1b (a b : ℤ) (h : a * b = a) : b =  (1 : ℤ) ∨ a = 0 := mul_right_eq_self₀.mp h
@@ -42,4 +46,3 @@ theorem h3_1 (a b : ℤ) (dab : a ∣ b) (dba : b ∣ a) : a = b ∨ a = -b := b
       rw [jba]
       rw [this]
       ring
-
