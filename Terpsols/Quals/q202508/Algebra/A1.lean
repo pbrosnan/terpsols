@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 Patrick Brosnan. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Patrick Brosnan
+-/
 import Mathlib.Algebra.Group.Subgroup.Finite
 import Mathlib.Analysis.Normed.Ring.Lemmas
 import Mathlib.GroupTheory.Index
