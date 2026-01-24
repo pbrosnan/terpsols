@@ -5,6 +5,7 @@ open BigOperators
 
 /- Herstein Topics in Algebra.  Problem 1.3.1:
     If a ∣ b and b ∣ a, show that a = ± b.
+    Solution in theorem h3_1 below.
 -/
 
 lemma l3_1a (a b : ℤ) (h : a ^ 2 = b ^ 2) : a = b ∨ a = -b := sq_eq_sq_iff_eq_or_eq_neg.mp h
