@@ -119,6 +119,5 @@ theorem alg_p1_b (N : Subgroup G) (hyp : N.Normal) [Finite N] : (Cent N).FiniteI
     rw [Subgroup.relIndex_top_right] at nrel
     exact index_ne_zero_iff_finite.mp nrel
 
-#min_imports
 
 end Algebra_Problem_1
