@@ -8,11 +8,6 @@ import Mathlib.Analysis.Normed.Ring.Lemmas
 import Mathlib.GroupTheory.Index
 import Mathlib.Tactic.Group
 
-noncomputable section Algebra_Problem_1
-open Subgroup
-open Function
-open MonoidHom
-
 /-!
    # UMD Math Fall 2025 Algebra Qualifying Exam Problem 1
 
@@ -27,6 +22,11 @@ open MonoidHom
    - Part 1 is solved in `alg_p1_a`	
    - Part 2 is solved in `alg_p1_b`
 -/
+
+noncomputable section Algebra_Problem_1
+open Subgroup
+open Function
+open MonoidHom
 
 variable {G : Type*} [Group G]
 variable (N : Subgroup G)
