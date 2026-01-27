@@ -5,19 +5,20 @@ Authors: Patrick Brosnan
 -/
 import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 
-noncomputable section Analysis_Problem
+/-!
+# UMD Math Fall 2025 Analysis Qualifying Exam Problem 1
 
-/-
-Problem 1: Let A be a Lebesgue measurable subset of R with 0 < m(A) < ∞,
+# Problem Statement
+Let A be a Lebesgue measurable subset of R with 0 < m(A) < ∞,
 where m denotes the Lebesgue measure on R.
 Prove that for any positive real number a < m(A), there exists a compact set K ⊂ A
 such that m(K) = a.
--/
 
-/- Solution in
-      theorem exists_compact_eq
-  at the end of the file.
+# Solution 
+  -  Solved in in `exists_compact_eq`
 
+# Comment on Problem Statment 
+ 
   Note that the statement above, which is the same as the statement
   on the Qualifying Exam makes
   the unecessary assumption that m(A) < ∞.
@@ -29,9 +30,9 @@ such that m(K) = a.
   where m denotes the Lebesgue measure on R.
   For any positive real number a < m(A), there exists a compact set K ⊂ A
   such that m(K) = a.
--/
 
-/-
+# Idea behind solution 
+
   The mathematical idea behind the solution is that Lebesque
   measure is inner regular.  So, if a < m(A), there always
   exists a compact subset K₁ of A with a < m(K).
@@ -53,6 +54,9 @@ such that m(K) = a.
   for these various is the reason for most of the lemmas in
   the file.
 -/
+
+noncomputable section Analysis_Problem
+
 
 noncomputable section
 

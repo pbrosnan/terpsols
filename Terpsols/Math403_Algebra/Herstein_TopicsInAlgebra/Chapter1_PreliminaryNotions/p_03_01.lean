@@ -4,14 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Patrick Brosnan
 -/
 import Mathlib.Analysis.Normed.Ring.Lemmas
+/-!
+    # Herstein Topics in Algebra.  Problem 1.3.1:
+    
+    # Problem Statement 
+
+    If a ∣ b and b ∣ a, show that a = ± b.
+    
+    # Solution 
+      - Solved in `h3_1`.
+-/
 
 open BigOperators
 
-/-
-    Herstein Topics in Algebra.  Problem 1.3.1:
-    If a ∣ b and b ∣ a, show that a = ± b.
-    Solution in theorem h3_1 below.
--/
 
 lemma l3_1c (a b : ℤ) (h : a * b = a) (nz : a ≠ 0) : b = 1 := Int.eq_one_of_mul_eq_self_right nz h
 
