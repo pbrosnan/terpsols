@@ -8,7 +8,7 @@ import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 /-!
 # UMD Math Fall 2025 Analysis Qualifying Exam Problem 1
 
-# Problem Statement
+## Problem Statement
 Let A be a Lebesgue measurable subset of R with 0 < m(A) < ∞,
 where m denotes the Lebesgue measure on R.
 Prove that for any positive real number a < m(A), there exists a compact set K ⊂ A
@@ -17,13 +17,13 @@ such that m(K) = a.
 # Solution 
   -  Solved in in `exists_compact_eq`
 
-# Comment on Problem Statment 
+## Comment on Problem Statment 
  
   Note that the statement above, which is the same as the statement
-  on the Qualifying Exam makes
-  the unecessary assumption that m(A) < ∞.
-  theorem exists_compact_eq below proves
-  without the unecessary assumption.
+  on the Qualifying Exam, makes
+  the unnecessary assumption that m(A) < ∞.
+  The theorem `exists_compact_eq` below proves
+  the statement without the unnecessary assumption.
   In other words, theorem exists_compact_eq proves the following:
 
   Let A be a Lebesgue measurable subset of R with 0 < m(A),
@@ -31,11 +31,11 @@ such that m(K) = a.
   For any positive real number a < m(A), there exists a compact set K ⊂ A
   such that m(K) = a.
 
-# Idea behind solution 
+## Idea behind solution 
 
   The mathematical idea behind the solution is that Lebesque
   measure is inner regular.  So, if a < m(A), there always
-  exists a compact subset K₁ of A with a < m(K).
+  exists a compact subset K₁ of A with a < m(K₁).
   Then the function f(r) = m(K₁ ∩ [-r, r]) is continuous
   with f(0) = 0 and f(r) = m(K₁) for r >> 0.
   So, by the Intermediate Value Theorem, we can find an r
@@ -53,6 +53,11 @@ such that m(K) = a.
   Going back an forth between various notions of distance
   for these various is the reason for most of the lemmas in
   the file.
+
+  On the other hand, it seems likely that formulating the 
+  problem in a more general setting (e.g., for n-dimensional
+  space instead of just R) would, in fact, lead to a different
+  and substantially simpler approach.
 -/
 
 noncomputable section Analysis_Problem
