@@ -63,9 +63,6 @@ such that m(K) = a.
 
 noncomputable section Analysis_Problem
 
-
-noncomputable section
-
 open Set Filter MeasureTheory ENNReal TopologicalSpace MetricSpace
 open scoped symmDiff Topology
 open MeasureTheory
