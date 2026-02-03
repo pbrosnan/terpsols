@@ -9,24 +9,26 @@ import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 # UMD Math Fall 2025 Analysis Qualifying Exam Problem 1
 
 ## Problem Statement
+
 Let A be a Lebesgue measurable subset of R with 0 < m(A) < ∞,
 where m denotes the Lebesgue measure on R.
-Prove that for any positive real number a < m(A), there exists a compact set K ⊂ A
+Prove that, for any positive real number a < m(A), there exists a compact set K ⊂ A
 such that m(K) = a.
 
-# Solution 
+## Solution 
+
   -  Solved in in `exists_compact_eq`
 
 ## Comment on Problem Statment 
- 
+
   Note that the statement above, which is the same as the statement
   on the Qualifying Exam, makes
-  the unnecessary assumption that m(A) < ∞.
+  the unnecessary assumption that 0 < m(A) < ∞.
   The theorem `exists_compact_eq` below proves
   the statement without the unnecessary assumption.
   In other words, theorem exists_compact_eq proves the following:
 
-  Let A be a Lebesgue measurable subset of R with 0 < m(A),
+  Let A be a Lebesgue measurable subset of R,
   where m denotes the Lebesgue measure on R.
   For any positive real number a < m(A), there exists a compact set K ⊂ A
   such that m(K) = a.
@@ -46,15 +48,14 @@ such that m(K) = a.
   The main technical challenge in implementing this solution
   is dealing with the volumes of intervals in lean and continuity.
   In particular, for the continuity, mathlib4 seems to want
-  to think in terms of edist(r,s), the generalized distance
+  to think in terms of edist(r,s), the distance
   between points r and s viewed as points in a metric space.
   On the other hand, volumes are reported as elements of ENNReal,
   the extended nonnegative real numbers: [0, ∞]
-  Going back an forth between various notions of distance
-  for these various is the reason for most of the lemmas in
-  the file.
+  Going back and forth between various notions of distance
+  is the reason for most of the lemmas in the file.
 
-  On the other hand, it seems likely that formulating the 
+  It seems likely that formulating the 
   problem in a more general setting (e.g., for n-dimensional
   space instead of just R) would, in fact, lead to a different
   and substantially simpler approach.
@@ -77,20 +78,6 @@ open Real
 
 variable {A : Set ℝ}
 variable (a : NNReal)
-
-example : volume A = (volume : Measure ℝ) A := rfl
-example : (0 : ENNReal) < ⊤ := by norm_num
-example : ¬((⊤ : ENNReal) < ⊤) := by norm_num
-example (a : NNReal) : a < (⊤ : ENNReal) := ENNReal.coe_lt_top
-example : (edist (0 : ℝ) 1).toReal = 1 := by
-  simp only [edist_zero_left, nnnorm_one, coe_one, toReal_one]
-example {r s : ℝ} (h : r < s) : (edist r s).toReal = s - r := by
-  rw [edist_eq_enorm_sub]
-  norm_num
-  simp [abs]
-  linarith
-example {r s : ℝ} : (edist r s) = (edist s r) := by
-  exact edist_comm r s
 
 lemma volle (r s : ℝ) : volume (Icc r s) ≤ edist s r := by
   simp_all only [volume_Icc]
@@ -150,8 +137,6 @@ lemma cbints {x y : ℝ} : closedBall 0 y ⊆
     constructor
     · exact neg_le.mp vin
     · exact lt_neg_of_lt_neg h
-
-example {a b : ℝ} {h : a = b} : a ≤ b := by exact ge_of_eq (id (Eq.symm h))
 
 lemma edisteq (x y : ℝ) : edist x y = edist (-y) (-x) := by
   rw[edist_comm]
