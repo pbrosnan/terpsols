@@ -26,7 +26,6 @@ open Ideal
 
 variable {R : Type*} [CommRing R]
 
-
 def J : Ideal R := sInf { I : Ideal R | IsMaximal I }
 
 lemma elts_of_J (x : R) : x ∈ J ↔ ∀ I : Ideal R, IsMaximal I → x ∈ I := by
@@ -50,6 +49,11 @@ theorem alg_p3_a {x : R} (h : x ∈ J) : IsUnit (1 + x) := by
    apply isUnit_of_sub_one_mem_jacobson_bot
    exact this
 
+theorem alg_p3_b (I : Ideal R) (hyp : ∀ y ∈ I, IsUnit (1+y) ) : I ≤ J := by
+   intro x xI
+   rw [J_is_jacobson_bot]
+   have : ∀ r, x * r ∈ I := fun r ↦ IsTwoSided.mul_mem_of_left r xI
+   have : ∀ r, IsUnit (x * r + 1) :=
 
 
 
