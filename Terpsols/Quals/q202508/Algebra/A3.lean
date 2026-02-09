@@ -68,8 +68,7 @@ theorem alg_p3_b (I : Ideal R) (hyp : ∀ y ∈ I, IsUnit (1 + y)) : I ≤ J := 
       exact (IsUnit.mem_submonoid_iff (1 + y)).mp (hyp y yin)
    have : ∀ r, x * r ∈ I := fun r ↦ IsTwoSided.mul_mem_of_left r xI
    have : ∀ r, IsUnit (x * r + 1) :=
-      (fun r => hypc (x * r) (this r)
-      )
+      fun r => hypc (x * r) (this r)
    exact mem_jacobson_bot.mpr this
 
 end Algebra_P3
