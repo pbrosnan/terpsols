@@ -3,10 +3,7 @@ Copyright (c) 2026 Patrick Brosnan. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Patrick Brosnan
 -/
-import Mathlib.Algebra.Group.Subgroup.Finite
-import Mathlib.Analysis.Normed.Ring.Lemmas
-import Mathlib.GroupTheory.Index
-import Mathlib.Tactic.Group
+import Mathlib
 
 /-!
    # UMD Math Fall 2025 Algebra Qualifying Exam Problem 3
@@ -24,3 +21,9 @@ import Mathlib.Tactic.Group
    - Part 1 is solved in `alg_p3_a`
    - Part 2 is solved in `alg_p3_b`
 -/
+
+noncomputable section Algebra_Problem_3
+
+variable {R : Type*} [CommRing R]
+
+#check R
