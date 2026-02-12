@@ -36,12 +36,14 @@ variable {𝕜 : Type*} [NontriviallyNormedField 𝕜]
   {f : 𝕜 → 𝕜}
   {U : Set 𝕜}
 
+def eventually_poly_bounded (g : 𝕜 → 𝕜) :=
+  ∃ C R : ℝ, ∃ m : ℕ, ∀ z : 𝕜, ‖z‖ ≤ R → ‖g z‖  ≤ C * ‖z‖ ^ m
 
-/- A polynomially bounded meromorphic function on 𝕜 which is in normal
+/- An eventually polynomially bounded meromorphic function on 𝕜 which is in normal
    form everywhere is a rational function. -/
 theorem rational_of_poly_bounded (mnf : ∀ z : 𝕜,  MeromorphicNFAt f z)
-  (pb : ∃ C R : ℝ, ∃ m : ℕ, ∀ z : 𝕜, ‖f z‖  ≤ C * ‖z‖ ^ m) :
-  ∃ d : 𝕜 → ℤ, f = fun z ↦ ∏ᶠ u, (z - u) ^ d u := by
+  (epb : eventually_poly_bounded f) :
+  ∃ d : 𝕜 → ℤ, f = fun z ↦ ∏ᶠ u, (z - u) ^ d u := by sorry
 
 
 
