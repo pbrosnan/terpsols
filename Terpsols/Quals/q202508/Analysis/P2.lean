@@ -3,7 +3,8 @@ Copyright (c) 2026 Patrick Brosnan. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Patrick Brosnan
 -/
-import Mathlib.Analysis.Meromorphic.Divisor
+
+import Mathlib.Analysis.Meromorphic.FactorizedRational
 
 /-!
 # UMD Math Fall 2025 Analysis Qualifying Exam Problem 2
@@ -19,6 +20,44 @@ integer m such that
 whenever |z| > R.
 Prove that f is a rational function (i.e., the quotient
 of two polynomials.)
+
+## Solution
+
+- `theorem rational_of_poly_bounded` solves Part 1.
+
+-/
+
+section mero_rational
+
+open Topology WithTop Function.FactorizedRational Meromorphic
+
+
+variable {𝕜 : Type*} [NontriviallyNormedField 𝕜]
+  {f : 𝕜 → 𝕜}
+  {U : Set 𝕜}
+
+
+/- A polynomially bounded meromorphic function on 𝕜 which is in normal
+   form everywhere is a rational function. -/
+theorem rational_of_poly_bounded (mnf : ∀ z : 𝕜,  MeromorphicNFAt f z)
+  (pb : ∃ C R : ℝ, ∃ m : ℕ, ∀ z : 𝕜, ‖f z‖  ≤ C * ‖z‖ ^ m) :
+  ∃ d : 𝕜 → ℤ, f = fun z ↦ ∏ᶠ u, (z - u) ^ d u := by
+
+
+
+
+
+end mero_rational
+
+
+#check Meromorphic.meromorphicAt
+#check AnalyticAt.meromorphicNFAt
+#check meromorphicNFAt_congr
+#check MeromorphicNFAt
+
+
+
+/-!
 
 ## Comments
 
