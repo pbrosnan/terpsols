@@ -5,6 +5,7 @@ Authors: Patrick Brosnan
 -/
 
 import Mathlib.Analysis.Meromorphic.FactorizedRational
+import Mathlib.Tactic
 
 /-!
 # UMD Math Fall 2025 Analysis Qualifying Exam Problem 2
@@ -36,13 +37,39 @@ variable {𝕜 : Type*} [NontriviallyNormedField 𝕜]
   {f : 𝕜 → 𝕜}
   {U : Set 𝕜}
 
-def eventually_poly_bounded (g : 𝕜 → 𝕜) :=
-  ∃ C R : ℝ, ∃ m : ℕ, ∀ z : 𝕜, ‖z‖ ≤ R → ‖g z‖  ≤ C * ‖z‖ ^ m
+def ev_poly_bndd (g : 𝕜 → 𝕜) :=
+  ∃ C R : ℝ, ∃ m : ℕ, ∀ z : 𝕜, ‖z‖ > R → ‖g z‖  ≤ C * ‖z‖ ^ m
+
+lemma ev_poly_bnde_of_prod {g h : 𝕜 → 𝕜} (bg : ev_poly_bndd g) (bh : ev_poly_bndd h) :
+  ev_poly_bndd (fun z ↦ (g z) * (h z)) := by
+  simp only [ev_poly_bndd, gt_iff_lt] at bg bh
+  simp only [ev_poly_bndd]
+  obtain ⟨C1, R1, m1, hyp1⟩ := bg
+  obtain ⟨C2, R2, m2, hyp2⟩ := bh
+  use C1 * C2
+  use (max R1 R2)
+  use m1 + m2
+  intro z zgt
+  have lt1 : ‖g z‖ ≤ C1 * ‖z‖ ^ m1 := by
+    apply hyp1
+    calc R1
+      _≤ max R1 R2 := le_max_left R1 R2
+      _< ‖z‖ := zgt
+  have lt2 : ‖h z‖ ≤ C2 * ‖z‖ ^ m2 := by
+    apply hyp2
+    calc R2
+      _≤ max R1 R2 := le_max_right R1 R2
+      _< ‖z‖ := zgt
+  sorry
+
+
+
+#check add_le_add
 
 /- An eventually polynomially bounded meromorphic function on 𝕜 which is in normal
    form everywhere is a rational function. -/
 theorem rational_of_poly_bounded (mnf : ∀ z : 𝕜,  MeromorphicNFAt f z)
-  (epb : eventually_poly_bounded f) :
+  (epb : ev_poly_bndd f) :
   ∃ d : 𝕜 → ℤ, f = fun z ↦ ∏ᶠ u, (z - u) ^ d u := by sorry
 
 
