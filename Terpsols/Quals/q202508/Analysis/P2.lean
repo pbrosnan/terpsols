@@ -34,13 +34,12 @@ open Topology WithTop Function.FactorizedRational Meromorphic
 
 
 variable {𝕜 : Type*} [NontriviallyNormedField 𝕜]
-  {f : 𝕜 → 𝕜}
-  {U : Set 𝕜}
+
 
 def ev_poly_bndd (g : 𝕜 → 𝕜) :=
   ∃ C R : ℝ, ∃ m : ℕ, ∀ z : 𝕜, ‖z‖ > R → ‖g z‖  ≤ C * ‖z‖ ^ m
 
-lemma ev_poly_bnde_of_prod {g h : 𝕜 → 𝕜} (bg : ev_poly_bndd g) (bh : ev_poly_bndd h) :
+lemma ev_poly_bndd_of_prod {g h : 𝕜 → 𝕜} (bg : ev_poly_bndd g) (bh : ev_poly_bndd h) :
   ev_poly_bndd (fun z ↦ (g z) * (h z)) := by
   simp only [ev_poly_bndd, gt_iff_lt] at bg bh
   simp only [ev_poly_bndd]
@@ -68,9 +67,9 @@ lemma ev_poly_bnde_of_prod {g h : 𝕜 → 𝕜} (bg : ev_poly_bndd g) (bh : ev_
 
 /- An eventually polynomially bounded meromorphic function on 𝕜 which is in normal
    form everywhere is a rational function. -/
-theorem rational_of_poly_bounded (mnf : ∀ z : 𝕜,  MeromorphicNFAt f z)
+theorem rat_of_poly_bndd {f : ℂ → ℂ} (mnf : ∀ z : ℂ,  MeromorphicNFAt f z)
   (epb : ev_poly_bndd f) :
-  ∃ d : 𝕜 → ℤ, f = fun z ↦ ∏ᶠ u, (z - u) ^ d u := by sorry
+  ∃ d : ℂ → ℤ, f = fun z ↦ ∏ᶠ u, (z - u) ^ d u := by sorry
 
 
 
